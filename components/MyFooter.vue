@@ -1,93 +1,98 @@
 <template>
-  <div class="Header">
-    <div class="Header-love-name">
-      <h1>
-        <span>l</span>
-        <span>x</span>
-        <span>y</span>
-        <span>❤</span>
-        <span>c</span>
-        <span>l</span>
-        <span>y</span>
-      </h1>
+  <div class="Footer">
+    <div id="clock">
+      <p class="date">{{ date }}</p>
+      <p class="time">{{ time }}</p>
+      <p class="text">DIGITAL CLOCK with Vue.js</p>
     </div>
   </div>
 </template>
 
 <script>
+const week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 export default {
-  name: 'MyHeader'
+  name: 'MyHeader',
+  data() {
+    return {
+      date: '',
+      time: '',
+      timer: null
+    }
+  },
+  mounted() {
+    this.timer = setInterval(()=>{
+      this.updateTime();
+    },1000)
+  },
+  beforeDestroy() {
+    if(this.timer){
+      clearInterval(this.timer);
+    }
+  },
+  methods: {
+    updateTime() {
+      const cd = new Date();
+      this.time = this.zeroPadding(cd.getHours(), 2) + ':' + this.zeroPadding(cd.getMinutes(), 2) + ':' + this.zeroPadding(cd.getSeconds(), 2);
+      this.date = this.zeroPadding(cd.getFullYear(), 4) + '-' + this.zeroPadding(cd.getMonth()+1, 2) + '-' + this.zeroPadding(cd.getDate(), 2) + ' ' + week[cd.getDay()];
+    },
+    zeroPadding(num, digit) {
+      let zero = '';
+      for(let i = 0; i < digit; i++) {
+        zero += '0';
+      }
+      return (zero + num).slice(-digit);
+    }
+  },
+
 }
 </script>
 
 <style scoped>
-.Header {
+.Footer {
   display: flex;
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
-  height: 100px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  height: 150px;
   position: fixed;
   text-align: center;
-  top: 0;
+  bottom: 0;
   width: 98%;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #FFF;
   z-index: 10;
   flex-direction: row;
   flex-wrap: nowrap;
   align-content: center;
   justify-content: center;
-  align-items: center
+  align-items: center;
+  background: #0f3854;
+  background: radial-gradient(ellipse at center,  #0a2e38  0%, #000000 70%);
+  background-size: 100%;
+}
+#clock {
+  font-family: "Share Tech Mono", monospace;
+  color: #ffffff;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #daf6ff;
+  text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+}
+#clock .time {
+  letter-spacing: 0.05em;
+  font-size: 50px;
+}
+#clock .date {
+  letter-spacing: 0.1em;
+  font-size: 18px;
+}
+#clock .text {
+  letter-spacing: 0.1em;
+  font-size: 12px;
+  padding: 10px 0 0;
 }
 
-.Header h1 {
-  //height: 60px;
-}
-
-.Header h1 span {
-  position: relative;
-  top: 0px;
-  display: inline-block;
-  animation: bounce .3s ease infinite alternate;
-  font-family: fantasy;
-  font-size: 80px;
-  color: #f1677b;
-  text-shadow: 0 1px 0 #dca3ad,
-  0 2px 0 #dca3ad,
-  0 3px 0 #dca3ad,
-  0 4px 0 #dca3ad,
-  0 5px 0 #dca3ad,
-  0 6px 0 transparent,
-  0 7px 0 transparent,
-  0 8px 0 transparent,
-  0 9px 0 transparent,
-  0 10px 10px rgba(209, 52, 52, .4);
-}
-
-.Header h1 span:nth-child(2) { animation-delay: .1s; }
-.Header h1 span:nth-child(3) { animation-delay: .2s; }
-.Header h1 span:nth-child(4) { animation-delay: .3s; color: #e11c3a;
-}
-.Header h1 span:nth-child(5) { animation-delay: .4s; }
-.Header h1 span:nth-child(6) { animation-delay: .5s; }
-.Header h1 span:nth-child(7) { animation-delay: .6s; }
-.Header h1 span:nth-child(8) { animation-delay: .7s; }
-
-@keyframes bounce {
-  100% {
-    top: -10px;
-    text-shadow: 0 1px 0 #dca3ad,
-    0 2px 0 #dca3ad,
-    0 3px 0 #dca3ad,
-    0 4px 0 #dca3ad,
-    0 5px 0 #dca3ad,
-    0 6px 0 #dca3ad,
-    0 7px 0 #dca3ad,
-    0 8px 0 #dca3ad,
-    0 9px 0 #dca3ad,
-    0 50px 25px rgba(209, 52, 52, .2);
-  }
-}
 </style>
 
